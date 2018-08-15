@@ -35,13 +35,22 @@ include "header.php";
   <?php
     
 if(isset($_POST['bts'])):
-
   if($_POST['nm']!=null  && $_POST['tl']!=null  && $_POST['tc']!=null && $_POST['tl']=$_POST['tc'] && $_POST['el']!=null  ){
 	  
 	 $nm = $_POST['nm'];
 	 $tc= $_POST['tc'];
 	 $el = $_POST['el'];
-	 
+	 $sql = "SELECT email from user WHERE email = '$el' ";
+$res = mysqli_query($mysqli, $sql);
+$row = mysqli_num_rows($res); 
+if ($row) {
+   
+    echo '<div class="alert alert-danger alert-dismissible" role="alert">
+				<button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+				<strong></strong>This email already exists
+
+             </div>';
+           }   else{
      $stmt = $mysqli->prepare("INSERT  INTO user(nameuser,password,email,tlogin) VALUES (?,?,?,'user') ");
      $stmt->bind_param('sss', $nm, $tc,$el);
      if($stmt->execute()):
@@ -63,10 +72,9 @@ if(isset($_POST['bts'])):
   <strong></strong>Registration failed<?php echo $stmt->error; ?>
 </div>
 <?php
-     endif;
-	  
-	 
-	 
+    
+   endif;
+		   }
   } else{
 ?>
 <p></p>
@@ -76,7 +84,6 @@ if(isset($_POST['bts'])):
 </div>
 <?php
   }
-  
   endif; 
 ?>
 
